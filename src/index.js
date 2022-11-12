@@ -1,6 +1,9 @@
 const express = require('express');
 
 const app = express();
+const courses = ['Curso 1', 'Curso 2', 'Curso 3'];
+
+app.use(express.json());
 
 app.get('/', (request, response) => {
   return response.json({
@@ -9,23 +12,27 @@ app.get('/', (request, response) => {
 });
 
 app.get('/courses', (request, response) => {
-  return response.json(['Curso 1', 'Curso 2', 'Curso 3']);
+  return response.json(courses);
 });
 
 app.post('/courses', (request, response) => {
-  return response.json(['Curso 1', 'Curso 2', 'Curso 3', 'Curso 4']);
+  courses.push(request.body.name);
+  return response.json(courses);
 });
 
 app.put('/courses/:id', (request, response) => {
-  return response.json(['Curso 6', 'Curso 2', 'Curso 3', 'Curso 4']);
+  courses[request.params.id - 1] = request.body.name;
+  return response.json(courses);
 });
 
 app.patch('/courses/:id', (request, response) => {
-  return response.json(['Curso 6', 'Curso 7', 'Curso 3', 'Curso 4']);
+  courses[request.params.id - 1] = request.body.name;
+  return response.json(courses);
 });
 
 app.delete('/courses/:id', (request, response) => {
-  return response.json(['Curso 6', 'Curso 7', 'Curso 4']);
+  courses.splice(request.params.id - 1, 1);
+  return response.json(courses);
 });
 
 app.listen(3333);
